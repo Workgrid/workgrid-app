@@ -1,0 +1,17 @@
+{
+  "appId": "com.workgrid.app",
+  "appName": "Workgrid",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "DisableDeploy": "true"
+    }
+  }
+}

@@ -1,0 +1,69 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: App Build & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  APPFLOW_ENVIRONMENT: Production # Need this for NPM install / secrets in AppFlow
+  ENT_NATIVE_KEY: ${{ secrets.ENT_NATIVE_KEY }}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false # Per the GitHub Pages action below
+      - name: Cache Node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install
+        run: npm install
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test
+  Ionic:
+    strategy:
+      matrix:
+        platform: ['Web', 'iOS', 'Android']
+        include:
+          - platform: Web
+            web-preview: ${{ github.ref == 'refs/heads/main' && 'no' || 'yes' }}
+          - platform: iOS
+            build-type: ${{ github.ref == 'refs/heads/main' && 'app-store' || 'ad-hoc' }}
+            destinations: ${{ github.ref == 'refs/heads/main' && 'Apple' || null }}
+            certificate: ${{ github.ref == 'refs/heads/main' && 'App Store' || 'Development' }}
+            native-config: Production
+          - platform: Android
+            build-type: ${{ github.ref == 'refs/heads/main' && 'release' || 'debug' }}
+            destinations: ${{ github.ref == 'refs/heads/main' && 'Google Internal' || null }}
+            certificate: ${{ github.ref == 'refs/heads/main' && 'App Store' || 'Development' }}
+            native-config: Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: ${{ matrix.platform }} build
+        uses: ionic-team/appflow-build@v1.0.1
+        with:
+          token: ${{ secrets.APPFLOW_TOKEN }}
+          app-id: ${{ secrets.APPFLOW_APP_ID }}
+          platform: ${{ matrix.platform }}
+          build-type: ${{ matrix.build-type }}
+          environment: ${{ env.APPFLOW_ENVIRONMENT }}
+          web-preview: ${{ matrix.web-preview }}
+          certificate: ${{ matrix.certificate }}
+          destinations: ${{ matrix.destinations }}
+          native-config: ${{ matrix.native-config }}

@@ -1,0 +1,8 @@
+{
+  "name": "Workgrid",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "cccb3a33"
+}
