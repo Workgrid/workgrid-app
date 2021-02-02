@@ -13,7 +13,8 @@ env:
   APPFLOW_ENVIRONMENT: Production # Need this for NPM install / secrets in AppFlow
   ENT_NATIVE_KEY: ${{ secrets.ENT_NATIVE_KEY }}
 jobs:
-  test:
+  build:
+    name: Lint, Test and Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +38,7 @@ jobs:
       - name: Test
         run: npm run test
   Ionic:
+    name: Ionic Build and Deploy
     strategy:
       matrix:
         platform: ['Web', 'iOS', 'Android']
@@ -44,9 +46,9 @@ jobs:
           - platform: Web
             web-preview: ${{ github.ref == 'refs/heads/main' && 'no' || 'yes' }}
           - platform: iOS
-            build-type: ${{ github.ref == 'refs/heads/main' && 'app-store' || 'ad-hoc' }}
+            build-type: app-store
             destinations: ${{ github.ref == 'refs/heads/main' && 'Apple' || null }}
-            certificate: ${{ github.ref == 'refs/heads/main' && 'App Store' || 'Development' }}
+            certificate: App Store
             native-config: Production
           - platform: Android
             build-type: ${{ github.ref == 'refs/heads/main' && 'release' || 'debug' }}
@@ -55,8 +57,12 @@ jobs:
             native-config: Production
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - name: ${{ matrix.platform }} build
-        uses: ionic-team/appflow-build@v1.0.1
+        uses: ionic-team/appflow-build@v1.0.2
         with:
           token: ${{ secrets.APPFLOW_TOKEN }}
           app-id: ${{ secrets.APPFLOW_APP_ID }}
