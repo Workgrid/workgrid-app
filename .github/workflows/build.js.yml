@@ -14,7 +14,7 @@ env:
   ENT_NATIVE_KEY: ${{ secrets.ENT_NATIVE_KEY }}
 jobs:
   build:
-    name: Lint, Test and Build
+    name: Lint, Test, Build and Sourcemap Upload
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +37,16 @@ jobs:
         run: npm run lint
       - name: Test
         run: npm run test
+      - name: Create Sentry Release
+        uses: getsentry/action-release@v1
+        if: github.ref == 'refs/heads/main'
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          sourcemaps: './build/static/js'
+          url_prefix: '~/static/js'
   Ionic:
     name: Ionic Build and Deploy
     strategy:
@@ -57,10 +67,6 @@ jobs:
             native-config: Production
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
       - name: ${{ matrix.platform }} build
         uses: ionic-team/appflow-build@v1.0.2
         with:
