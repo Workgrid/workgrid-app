@@ -2,8 +2,11 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import React from 'react'
 import ExploreContainer from '../components/ExploreContainer'
 import './Home.css'
+import { useTranslation } from 'react-i18next'
 
 const Home: React.FC = () => {
+  const { t } = useTranslation('home')
+
   return (
     <IonPage>
       <IonHeader>
@@ -14,7 +17,7 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle size="large">{t('title')}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <ExploreContainer />
