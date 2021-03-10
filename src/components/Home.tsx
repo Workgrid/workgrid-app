@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Button } from '@workgrid/ui'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from './AuthenticationProvider'
+import { useSpaces } from './SpacesProvider'
 
 const HorizontallyCenteredContainer = styled.div`
   display: flex;
@@ -24,6 +25,7 @@ const Container = styled(HorizontallyCenteredContainer)`
 
 const Home: React.FC = () => {
   const { signOut } = useAuth()
+  const { currentSpaceId, spaces, onSpaceChange } = useSpaces()
   const { t } = useTranslation('authentication')
 
   return (
@@ -31,6 +33,9 @@ const Home: React.FC = () => {
       <IonContent>
         <CenteredContent>
           <Container>
+            <p>Current Space: {spaces.find(space => space.id === currentSpaceId)?.name}</p>
+            {/* providing empty string for demonstration purposes until the actual screens to switch are in place. This wouldn't happen in practice */}
+            <Button onClick={() => onSpaceChange('')}>Switch Space</Button>
             <Button onClick={signOut}>{t('signOutText')}</Button>
           </Container>
         </CenteredContent>

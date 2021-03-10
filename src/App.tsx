@@ -24,8 +24,10 @@ import '@ionic/react/css/display.css'
 import './theme/variables.css'
 import { authenticationServiceFactory } from './services/authentication-service'
 import { AuthenticationProvider } from './components/AuthenticationProvider'
+import { SpacesProvider } from './components/SpacesProvider'
 import { companyCodeFetcher, onCompanyCodeChange, resetCompanyCode } from './services/company-code'
 import { globalConfigFetcher, resetGlobalConfig } from './services/global-config'
+import { spacesFetcher, onSpaceChange } from './services/spaces'
 
 const onReset = async () => {
   await Promise.all([resetCompanyCode(), resetGlobalConfig()])
@@ -41,12 +43,14 @@ const App: React.FC = () => (
         authenticationServiceFactory={authenticationServiceFactory}
         onReset={onReset}
       >
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route path="/home" component={Home} exact={true} />
-            <Route exact path="/" render={() => <Redirect to="/home" />} />
-          </IonRouterOutlet>
-        </IonReactRouter>
+        <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
+          <IonReactRouter>
+            <IonRouterOutlet>
+              <Route path="/home" component={Home} exact={true} />
+              <Route exact path="/" render={() => <Redirect to="/home" />} />
+            </IonRouterOutlet>
+          </IonReactRouter>
+        </SpacesProvider>
       </AuthenticationProvider>
     </IonApp>
   </Suspense>
