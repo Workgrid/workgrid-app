@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/react'
 import { IonReactRouter } from '@ionic/react-router'
-import Home from './pages/Home'
+import Home from './components/Home'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css'
@@ -22,16 +22,32 @@ import '@ionic/react/css/display.css'
 
 /* Theme variables */
 import './theme/variables.css'
+import { authenticationServiceFactory } from './services/authentication-service'
+import { AuthenticationProvider } from './components/AuthenticationProvider'
+import { companyCodeFetcher, onCompanyCodeChange, resetCompanyCode } from './services/company-code'
+import { globalConfigFetcher, resetGlobalConfig } from './services/global-config'
+
+const onReset = async () => {
+  await Promise.all([resetCompanyCode(), resetGlobalConfig()])
+}
 
 const App: React.FC = () => (
   <Suspense fallback={<IonSpinner />}>
     <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route path="/home" component={Home} exact={true} />
-          <Route exact path="/" render={() => <Redirect to="/home" />} />
-        </IonRouterOutlet>
-      </IonReactRouter>
+      <AuthenticationProvider
+        globalConfigFetcher={globalConfigFetcher}
+        companyCodeFetcher={companyCodeFetcher}
+        onCompanyCodeChange={onCompanyCodeChange}
+        authenticationServiceFactory={authenticationServiceFactory}
+        onReset={onReset}
+      >
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route path="/home" component={Home} exact={true} />
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </AuthenticationProvider>
     </IonApp>
   </Suspense>
 )

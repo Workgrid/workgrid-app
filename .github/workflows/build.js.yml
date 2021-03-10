@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ${{ matrix.platform }} build
-        uses: ionic-team/appflow-build@v1.0.2
+        uses: ionic-team/appflow-build@v1
         with:
           token: ${{ secrets.APPFLOW_TOKEN }}
           app-id: ${{ secrets.APPFLOW_APP_ID }}

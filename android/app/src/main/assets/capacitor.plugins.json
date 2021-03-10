@@ -10,5 +10,13 @@
   {
     "pkg": "@capacitor/keyboard",
     "classpath": "com.capacitorjs.plugins.keyboard.KeyboardPlugin"
+  },
+  {
+    "pkg": "@capacitor/network",
+    "classpath": "com.capacitorjs.plugins.network.NetworkPlugin"
+  },
+  {
+    "pkg": "@capacitor/storage",
+    "classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
   }
 ]

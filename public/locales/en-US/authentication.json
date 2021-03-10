@@ -1,0 +1,18 @@
+{
+  "cantConnectToNetwork": "Can't connect to the network",
+  "pleaseCheckInternetConnection": "Please check your internet connection",
+  "companyCodeLabel": "Company Code",
+  "companyCodePlaceholder": "Enter company code",
+  "changeCompanyCodeText": "Change company code",
+  "checkCompanyCodeText": "Check company code",
+  "resetDefaultCompanyCodeText": "Reset to default",
+  "invalidCompanyCodeText": "❗ ️Company code is invalid",
+  "pleaseEnterCompanyCodeText": "❗ Please enter a company code",
+  "signInText": "Sign In",
+  "signOutText": "Sign Out",
+  "workgridText": "Workgrid Software",
+  "versionText": "Version {{version}}",
+  "unknownAuthenticationHeader": "Unable to authenticate user",
+  "unknownAuthenticationMessage": "Reset the app to try again",
+  "unknownAuthenticationReset": "Reset"
+}

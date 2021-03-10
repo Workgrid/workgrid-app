@@ -10,7 +10,7 @@ i18n
   .use(I18NextChainedBackend)
   .use(initReactI18next)
   .init({
-    ns: ['common', 'home'],
+    ns: ['common', 'authentication'],
     lng: 'en-US',
     fallbackLng: 'en-US',
     interpolation: {
