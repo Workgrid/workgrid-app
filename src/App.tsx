@@ -28,6 +28,7 @@ import { SpacesProvider } from './components/SpacesProvider'
 import { companyCodeFetcher, onCompanyCodeChange, resetCompanyCode } from './services/company-code'
 import { globalConfigFetcher, resetGlobalConfig } from './services/global-config'
 import { spacesFetcher, onSpaceChange } from './services/spaces'
+import { ThemeProvider } from './components/ThemeProvider'
 
 const onReset = async () => {
   await Promise.all([resetCompanyCode(), resetGlobalConfig()])
@@ -36,22 +37,24 @@ const onReset = async () => {
 const App: React.FC = () => (
   <Suspense fallback={<IonSpinner />}>
     <IonApp>
-      <AuthenticationProvider
-        globalConfigFetcher={globalConfigFetcher}
-        companyCodeFetcher={companyCodeFetcher}
-        onCompanyCodeChange={onCompanyCodeChange}
-        authenticationServiceFactory={authenticationServiceFactory}
-        onReset={onReset}
-      >
-        <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
-          <IonReactRouter>
-            <IonRouterOutlet>
-              <Route path="/home" component={Home} exact={true} />
-              <Route exact path="/" render={() => <Redirect to="/home" />} />
-            </IonRouterOutlet>
-          </IonReactRouter>
-        </SpacesProvider>
-      </AuthenticationProvider>
+      <ThemeProvider>
+        <AuthenticationProvider
+          globalConfigFetcher={globalConfigFetcher}
+          companyCodeFetcher={companyCodeFetcher}
+          onCompanyCodeChange={onCompanyCodeChange}
+          authenticationServiceFactory={authenticationServiceFactory}
+          onReset={onReset}
+        >
+          <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
+            <IonReactRouter>
+              <IonRouterOutlet>
+                <Route path="/home" component={Home} exact={true} />
+                <Route exact path="/" render={() => <Redirect to="/home" />} />
+              </IonRouterOutlet>
+            </IonReactRouter>
+          </SpacesProvider>
+        </AuthenticationProvider>
+      </ThemeProvider>
     </IonApp>
   </Suspense>
 )

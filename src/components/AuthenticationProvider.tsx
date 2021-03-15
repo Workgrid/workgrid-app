@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 import { useAuthState, AuthenticationServiceFactory } from './use-auth-state'
 import { GlobalConfig } from '../workgrid-app'
 import { IonLoading, IonAlert } from '@ionic/react'
@@ -7,6 +7,7 @@ import { useStatus } from './use-network'
 import { useTranslation } from 'react-i18next'
 import { useAppInfo } from './use-app'
 import * as Sentry from '@sentry/browser'
+import { useTheme } from './ThemeProvider'
 
 interface AuthenticationContextInterface {
   getAccessToken: () => Promise<string | undefined>
@@ -57,6 +58,11 @@ export const AuthenticationProvider = ({
   const { networkStatus } = useStatus()
   const { appInfo } = useAppInfo()
   const { t } = useTranslation('authentication')
+  const { setApiHost } = useTheme()
+
+  useEffect(() => {
+    setApiHost(apiHost)
+  }, [apiHost, setApiHost])
 
   if (loading) return <IonLoading isOpen={true} data-testid="loading" />
 

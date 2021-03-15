@@ -3,6 +3,7 @@ import { SpacesProvider, SpacesProviderProps, SpacesContext, useSpaces } from '.
 import { renderHook, act as hookAct } from '@testing-library/react-hooks'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import { AuthenticationContext } from './AuthenticationProvider'
+import { ThemeProvider } from './ThemeProvider'
 
 describe('SpacesProvider', () => {
   const spacesFetcher = jest.fn()
@@ -74,11 +75,13 @@ describe('SpacesProvider', () => {
       )
 
       render(
-        <AuthenticationContext.Provider value={{ getAccessToken, apiHost, signOut: jest.fn() }}>
-          <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
-            <Child />
-          </SpacesProvider>
-        </AuthenticationContext.Provider>
+        <ThemeProvider>
+          <AuthenticationContext.Provider value={{ getAccessToken, apiHost, signOut: jest.fn() }}>
+            <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
+              <Child />
+            </SpacesProvider>
+          </AuthenticationContext.Provider>
+        </ThemeProvider>
       )
 
       // Wait for first render to flush
@@ -97,11 +100,13 @@ describe('SpacesProvider', () => {
       spacesFetcher.mockResolvedValueOnce({ spaces: [spaces[0]] })
 
       render(
-        <AuthenticationContext.Provider value={{ getAccessToken, apiHost, signOut: jest.fn() }}>
-          <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
-            <Child />
-          </SpacesProvider>
-        </AuthenticationContext.Provider>
+        <ThemeProvider>
+          <AuthenticationContext.Provider value={{ getAccessToken, apiHost, signOut: jest.fn() }}>
+            <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
+              <Child />
+            </SpacesProvider>
+          </AuthenticationContext.Provider>
+        </ThemeProvider>
       )
 
       await waitFor(() => expect(screen.getByText(childText)).toBeVisible())
@@ -116,11 +121,13 @@ describe('SpacesProvider', () => {
       spacesFetcher.mockResolvedValueOnce({ spaces: [spaces[0]], currentSpaceId })
 
       render(
-        <AuthenticationContext.Provider value={{ getAccessToken, apiHost, signOut: jest.fn() }}>
-          <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
-            <Child />
-          </SpacesProvider>
-        </AuthenticationContext.Provider>
+        <ThemeProvider>
+          <AuthenticationContext.Provider value={{ getAccessToken, apiHost, signOut: jest.fn() }}>
+            <SpacesProvider spacesFetcher={spacesFetcher} onSpaceChange={onSpaceChange}>
+              <Child />
+            </SpacesProvider>
+          </AuthenticationContext.Provider>
+        </ThemeProvider>
       )
 
       await waitFor(() => expect(screen.getByText(childText)).toBeVisible())

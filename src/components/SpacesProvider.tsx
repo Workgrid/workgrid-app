@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from './AuthenticationProvider'
 import { Spaces } from '@workgrid/ui'
 import { SpacesProps } from '@workgrid/ui/dist/components/Spaces'
+import { useTheme } from './ThemeProvider'
 
 interface SpacesContextInterface {
   currentSpaceId: string
@@ -99,6 +100,12 @@ export const SpacesProvider = ({ spacesFetcher, onSpaceChange, children }: Space
       current = false
     }
   }, [getSpaces])
+
+  const { setSpaceId } = useTheme()
+
+  useEffect(() => {
+    setSpaceId(currentSpaceId)
+  }, [currentSpaceId, setSpaceId])
 
   if (!spacesData) return <IonLoading isOpen={true} data-testid="loading" />
 

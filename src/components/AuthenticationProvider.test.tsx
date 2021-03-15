@@ -7,6 +7,7 @@ import {
 } from './AuthenticationProvider'
 import { renderHook, act as hookAct } from '@testing-library/react-hooks'
 import { render, screen, waitFor, act } from '@testing-library/react'
+import { ThemeProvider } from './ThemeProvider'
 
 describe('AuthenticationProvider', () => {
   const getAccessToken = jest.fn()
@@ -103,15 +104,17 @@ describe('AuthenticationProvider', () => {
       authenticationService.isAuthenticated.mockResolvedValueOnce(false)
 
       render(
-        <AuthenticationProvider
-          globalConfigFetcher={globalConfigFetcher}
-          companyCodeFetcher={companyCodeFetcher}
-          onCompanyCodeChange={onCompanyCodeChange}
-          authenticationServiceFactory={authenticationServiceFactory}
-          onReset={onReset}
-        >
-          <Child />
-        </AuthenticationProvider>
+        <ThemeProvider>
+          <AuthenticationProvider
+            globalConfigFetcher={globalConfigFetcher}
+            companyCodeFetcher={companyCodeFetcher}
+            onCompanyCodeChange={onCompanyCodeChange}
+            authenticationServiceFactory={authenticationServiceFactory}
+            onReset={onReset}
+          >
+            <Child />
+          </AuthenticationProvider>
+        </ThemeProvider>
       )
 
       // Wait for first render to flush
@@ -133,15 +136,17 @@ describe('AuthenticationProvider', () => {
       authenticationService.isAuthenticated.mockResolvedValueOnce(true)
 
       render(
-        <AuthenticationProvider
-          globalConfigFetcher={globalConfigFetcher}
-          companyCodeFetcher={companyCodeFetcher}
-          onCompanyCodeChange={onCompanyCodeChange}
-          authenticationServiceFactory={authenticationServiceFactory}
-          onReset={onReset}
-        >
-          <Child />
-        </AuthenticationProvider>
+        <ThemeProvider>
+          <AuthenticationProvider
+            globalConfigFetcher={globalConfigFetcher}
+            companyCodeFetcher={companyCodeFetcher}
+            onCompanyCodeChange={onCompanyCodeChange}
+            authenticationServiceFactory={authenticationServiceFactory}
+            onReset={onReset}
+          >
+            <Child />
+          </AuthenticationProvider>
+        </ThemeProvider>
       )
 
       await waitFor(() => expect(screen.getByText(childText)).toBeVisible())
